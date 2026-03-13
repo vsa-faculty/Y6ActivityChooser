@@ -32,7 +32,8 @@ var thisUser = Session.getActiveUser().getEmail(); //Logged In User
 var DisableDateLocking = false; //turns on or off the date lock out.
 var showSecondChoice = false; //turns on or off for displaying a second choice.
 var maxTripChoices = 3; //How many trip choices / checkboxes can users indicate as chosen?
-var extraDataFields = ["chosenBuddyId"]; //Field names to be included and collected from user
+var enableBuddyChoice = false; //Feature flag: set true to collect buddy preferences again.
+var extraDataFields = enableBuddyChoice ? ["chosenBuddyId"] : []; //Field names to be included and collected from user
 
 //For HTMLService app (from template)
 //var userSheetName = 'Members';
@@ -77,8 +78,13 @@ function loadGInfo() {
   var approverList = ListDoc.getSheetByName(myApproverListSheetName).getDataRange().getValues(); 
   //var studentList = ListDoc.getSheetByName(myStudentDataSheetName).getDataRange().getValues();
   var choicesList = SurveyDoc.getSheetByName(mySurveySheetName).getDataRange().getValues();
-  var buddySheet = ListDoc.getSheetByName(buddyListSheetName);
-  var buddyList = arrayToObjects(buddySheet.getRange(1,1,buddySheet.getLastRow(),4).getValues()); 
+  var buddyList = [];
+  if (enableBuddyChoice) {
+    var buddySheet = ListDoc.getSheetByName(buddyListSheetName);
+    if (buddySheet) {
+      buddyList = arrayToObjects(buddySheet.getRange(1,1,buddySheet.getLastRow(),4).getValues());
+    }
+  }
 
 
   var myApprover = getRowsMatching(approverList, approverEmailCol, thisUser);
@@ -124,7 +130,7 @@ function loadGInfo() {
   var refreshTime = Utilities.formatDate(new Date(), "GMT+08:00", "dd-MMM-yyyy hh:mm:ss")
   
   //Logger.log({studentInfo: studentInfo, tripCounts: tripCounts, buddyList: buddyList, userType: userType, canPost: canPost, error: error,  refreshed: refreshTime, maxSelections: maxTripChoices, user: thisUser, dataFields: extraDataFields})
-  return {studentInfo: studentInfo, tripCounts: tripCounts, buddyList: buddyList, userType: userType, canPost: canPost, error: error,  refreshed: refreshTime, maxSelections: maxTripChoices, user: thisUser, dataFields: extraDataFields};
+  return {studentInfo: studentInfo, tripCounts: tripCounts, buddyList: buddyList, userType: userType, canPost: canPost, error: error,  refreshed: refreshTime, maxSelections: maxTripChoices, user: thisUser, dataFields: extraDataFields, enableBuddyChoice: enableBuddyChoice};
 }
 
 function getTripCounts(){

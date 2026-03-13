@@ -67,6 +67,7 @@ app.controller('myCtrl', function($scope, $interval, filterFilter){
         $scope.tripCounts = data.tripCounts;
         $scope.students = processStudentData(data.studentInfo, data.tripCounts, data.dataFields);
         $scope.maxSelections = data.maxSelections;
+        $scope.enableBuddyChoice = !!data.enableBuddyChoice;
         $scope.buddyList = data.buddyList;
         $scope.canPost = data.canPost;
         } catch(e) {
