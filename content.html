@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VSA Year 6 Adventure Week 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&family=Special+Elite&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        vsaBlue: '#004C80',
+                        vsaRed: '#88002B',
+                    },
+                    fontFamily: {
+                        sans: ['Helvetica', 'Arial', 'sans-serif'],
+                        sculpture: ['Cinzel', 'serif'],
+                        sculptureBody: ['EB Garamond', 'serif'],
+                        robotics: ['Orbitron', 'sans-serif'],
+                        rockets: ['Space Mono', 'monospace'],
+                        mystery: ['Special Elite', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Specific Themes */
+        .sculpture-card { background-color: #fdfbf7; border-color: #e5d3b3; }
+        .sculpture-pattern { background-image: radial-gradient(#d4af37 0.5px, transparent 0.5px); background-size: 30px 30px; opacity: 0.1; }
+        
+        .robotics-card { background: linear-gradient(135deg, #004C80 0%, #1a1a1a 100%); color: white; }
+        .robotics-pattern { background-image: linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px); background-size: 20px 20px; }
+
+        .rockets-card { background-color: #e0f2fe; border: 2px dashed #0369a1; }
+        .rockets-pattern { background-image: radial-gradient(#0369a1 0.5px, transparent 0.5px); background-size: 15px 15px; opacity: 0.2; }
+
+        .mystery-card { background-color: #e7e5e4; border: 1px solid #78716c; box-shadow: inset 0 0 100px rgba(0,0,0,0.05); }
+        .mystery-pattern { background-image: url('https://www.transparenttextures.com/patterns/pinstriped-suit.png'); opacity: 0.3; }
+
+        .vsa-shadow { box-shadow: 0 10px 30px -10px rgba(0, 76, 128, 0.2); }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 font-sans">
+
+    <!-- VSA Header Bar -->
+    <div class="bg-vsaBlue h-1.5 w-full"></div>
+    
+    <header class="max-w-6xl mx-auto px-4 py-4 md:py-6 text-center">
+        <div class="flex justify-center mb-2 md:mb-3">
+            <div class="flex flex-col items-center">
+                <span class="text-vsaBlue font-bold tracking-[0.3em] text-[9px] md:text-xs uppercase">Victoria Shanghai Academy</span>
+                <div class="h-[1px] w-24 md:w-32 bg-vsaRed my-1"></div>
+                <span class="text-vsaRed font-bold text-[9px] uppercase">滬江維多利亞學校</span>
+            </div>
+        </div>
+        
+        <h1 class="text-xl md:text-3xl font-black text-vsaBlue tracking-tight uppercase">
+            Adventure Week <span class="text-vsaRed italic">2026</span>
+        </h1>
+        <p class="text-[10px] md:text-sm text-slate-500 max-w-2xl mx-auto px-4 mt-1">
+            Choose your journey for Year 6. Explore missions below.
+        </p>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="max-w-6xl mx-auto px-4 pb-12">
+        
+        <!-- Top Navigation Selector -->
+        <nav class="flex overflow-x-auto no-scrollbar gap-1.5 md:gap-3 mb-4 pb-2 border-b border-slate-200" id="nav-container">
+            <!-- Navigation buttons injected by JS -->
+        </nav>
+
+        <!-- Activity Detail Card -->
+        <div id="card-display" class="w-full">
+            <!-- Active card injected by JS -->
+        </div>
+    </main>
+
+    <footer class="bg-vsaBlue text-white py-6">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-xs text-blue-300">MYP Activities Week 2026 • Year 6 Choice Portal</p>
+        </div>
+    </footer>
+
+    <script>
+        const activities = [
+            {
+                id: 'sculpture',
+                title: 'CREATIVE CARDBOARD SCULPTURE',
+                staff: 'Kath Chiu, Kelsey Long',
+                room: 'N1021',
+                description: 'What will you create in the cardboard sculpture challenge? Anything you can imagine! Learn different 3D sculpture techniques using cardboard, wire, string, and other recycled art materials. Draw inspiration from contemporary artists. Design and create an original sculpture inspired by your creative interests.',
+                cardClass: 'sculpture-card',
+                patternClass: 'sculpture-pattern',
+                fontClass: 'font-sculpture',
+                bodyFont: 'font-sculptureBody',
+                accentColor: 'text-amber-800',
+                btnColor: 'bg-amber-800',
+                emoji: '🏺'
+            },
+            {
+                id: 'robotics',
+                title: 'ROBO OLYMPICS',
+                staff: 'Andrew Chiu, Ko Wong, Louis Wong',
+                room: 'V++, Think Tank & 6/F Commons',
+                description: 'Can you and your team of robotics engineers design, build, compete and win in the VSA Robo Olympics? Test your skills, communication, teamwork and problem solving through challenges of speed, agility and 1-on-1 battles. A fun-packed day that will hone your engineering, art and interpersonal competencies. Can you be the champion?',
+                cardClass: 'robotics-card',
+                patternClass: 'robotics-pattern',
+                fontClass: 'font-robotics',
+                bodyFont: 'font-sans',
+                accentColor: 'text-cyan-400',
+                btnColor: 'bg-cyan-500',
+                emoji: '⚡'
+            },
+            {
+                id: 'rockets',
+                title: 'BOTTLE ROCKET DESIGN CAMP',
+                staff: 'George Brokenshire, Muthar Younis',
+                room: 'Room 904C/D, 12th Floor Playground',
+                description: 'Get ready to blast off! During this exciting hands‑on camp, students will design, build, and launch their very own bottle rockets while exploring the science that makes them soar. From testing pressure and air resistance to refining flight stability, each team will apply creativity and problem‑solving to engineer the ultimate rocket. The week will finish with the Bottle Rocket Championship!',
+                cardClass: 'rockets-card',
+                patternClass: 'rockets-pattern',
+                fontClass: 'font-rockets',
+                bodyFont: 'font-rockets',
+                accentColor: 'text-blue-700',
+                btnColor: 'bg-blue-700',
+                emoji: '🚀'
+            },
+            {
+                id: 'mystery',
+                title: 'THE BUBBLE TEA MYSTERY',
+                staff: 'Anne Allan, Laura Malloch',
+                room: 'Drama Room N918 & N1120',
+                description: 'Work with your team to try to solve the challenging mystery of what happened to Mr. Arnold West whose body was found in Hong Kong’s “Boba Tea Booth” on Wellington Street, Central! Apply your reading, writing, and viewing skills to examine the reconstructed crime scene for clues and evidence. Who was involved, and what were their motives?',
+                cardClass: 'mystery-card',
+                patternClass: 'mystery-pattern',
+                fontClass: 'font-mystery',
+                bodyFont: 'font-mystery',
+                accentColor: 'text-stone-900',
+                btnColor: 'bg-stone-900',
+                emoji: '🔍'
+            }
+        ];
+
+        let activeIndex = 0;
+
+        function render() {
+            const nav = document.getElementById('nav-container');
+            const display = document.getElementById('card-display');
+            const current = activities[activeIndex];
+
+            // Render Horizontal Nav
+            nav.innerHTML = activities.map((activity, index) => `
+                <button onclick="setActive(${index})" class="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 text-left border-b-2 ${
+                    activeIndex === index 
+                    ? 'bg-white border-vsaRed shadow-sm z-10' 
+                    : 'bg-transparent border-transparent hover:border-vsaBlue hover:bg-white/50'
+                }">
+                    <div class="text-lg md:text-xl">${activity.emoji}</div>
+                    <h3 class="font-bold text-[9px] md:text-[10px] leading-tight uppercase tracking-wider ${activeIndex === index ? 'text-vsaBlue' : 'text-slate-400'}">
+                        ${activity.title.split(' ').slice(0, 2).join(' ')}...
+                    </h3>
+                </button>
+            `).join('');
+
+            // Render Full Width Card
+            display.innerHTML = `
+                <div class="relative overflow-hidden rounded-[1.5rem] md:rounded-[2.5rem] min-h-[400px] border-4 transition-all duration-500 ${current.cardClass} shadow-xl">
+                    <div class="absolute inset-0 pointer-events-none ${current.patternClass}"></div>
+                    
+                    <div class="relative z-10 p-5 md:p-10">
+                        <!-- Top Tag -->
+                        <div class="flex items-center gap-2 mb-4 md:mb-6">
+                             <div class="h-1 w-6 md:w-10 ${current.id === 'robotics' ? 'bg-cyan-400' : 'bg-vsaRed'}"></div>
+                             <span class="text-[9px] md:text-[10px] font-bold uppercase tracking-widest ${current.id === 'robotics' ? 'text-cyan-400' : 'text-slate-500'}">Mission Briefing</span>
+                        </div>
+
+                        <!-- Header Area -->
+                        <div class="mb-4 md:mb-8">
+                            <h2 class="text-2xl md:text-5xl font-black mb-4 leading-[1.1] ${current.fontClass} ${current.id === 'robotics' ? 'text-white italic' : 'text-slate-900'}">
+                                ${current.title}
+                            </h2>
+                        </div>
+
+                        <!-- Description Area -->
+                        <div class="max-w-5xl mb-6 md:mb-10">
+                            <p class="text-base md:text-2xl leading-relaxed md:leading-[1.4] ${current.bodyFont} ${current.id === 'robotics' ? 'text-blue-100' : 'text-slate-800'}">
+                                ${current.description}
+                            </p>
+                        </div>
+
+                        <!-- Info Row (Staff & Location moved below description) -->
+                        <div class="flex flex-wrap gap-2 md:gap-4 mb-8 md:mb-12">
+                            <div class="px-3 md:px-5 py-2 bg-white/20 backdrop-blur-sm rounded-lg border border-white/30 shadow-sm">
+                                <span class="block text-[8px] md:text-[9px] uppercase opacity-60 font-black mb-0.5 tracking-tighter">Staffing Team</span>
+                                <span class="font-bold text-[10px] md:text-sm">${current.staff}</span>
+                            </div>
+                            <div class="px-3 md:px-5 py-2 bg-white/20 backdrop-blur-sm rounded-lg border border-white/30 shadow-sm">
+                                <span class="block text-[8px] md:text-[9px] uppercase opacity-60 font-black mb-0.5 tracking-tighter">Mission Base</span>
+                                <span class="font-bold text-[10px] md:text-sm">${current.room}</span>
+                            </div>
+                        </div>
+
+                        <!-- Theme Decoration Footer -->
+                        <div class="flex justify-between items-center border-t pt-4 md:pt-6 ${current.id === 'robotics' ? 'border-white/10' : 'border-slate-200'}">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-white shadow-md text-base md:text-2xl">
+                                    ${current.emoji}
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-[8px] md:text-[10px] font-bold uppercase tracking-widest ${current.id === 'robotics' ? 'text-cyan-400' : 'text-slate-400'}">
+                                        Exploration Series
+                                    </span>
+                                    <span class="text-[8px] md:text-[9px] font-bold text-vsaRed">VSA Y6 2026</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Visual Flair -->
+                            <div class="hidden md:block">
+                                ${current.id === 'mystery' ? '<div class="opacity-30 italic text-sm font-mystery tracking-[0.2em]">TOP SECRET</div>' : ''}
+                                ${current.id === 'sculpture' ? '<div class="h-10 w-10 border border-amber-300 rounded-full opacity-30 flex items-center justify-center text-[7px] font-sculpture">GALLERY</div>' : ''}
+                                ${current.id === 'rockets' ? '<div class="text-[10px] font-rockets opacity-40 bg-blue-900/10 px-2 py-0.5 rounded tracking-tighter">DATA: Y6-BLAST-26</div>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function setActive(index) {
+            activeIndex = index;
+            render();
+            const btn = document.querySelectorAll('nav button')[index];
+            btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+
+        window.onload = render;
+    </script>
+</body>
+</html>
