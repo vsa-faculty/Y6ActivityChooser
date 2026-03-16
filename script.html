@@ -16,6 +16,13 @@ app.controller('myCtrl', function($scope) {
   $scope.student      = null;   // single student record for current user
   $scope.activeActivityId = null;
   $scope.tokenSlotsData = [];
+  $scope.canEditChoices = function() {
+    return !!($scope.student && $scope.student.canPost && $scope.data.userType && $scope.data.userType.isStudent);
+  };
+
+  $scope.hasStudentRecord = function() {
+    return !!$scope.student;
+  };
 
   // ── Boot ───────────────────────────────────────────────────
   function loadData() {
@@ -54,9 +61,13 @@ app.controller('myCtrl', function($scope) {
       $scope.enableBuddyChoice = !!data.enableBuddyChoice;
       $scope.buddyList        = data.buddyList;
 
-      // Always show only the current user's own record (first match).
-      var allStudents = processStudentData(data.studentInfo, data.tripCounts, data.dataFields);
-      $scope.student = allStudents.length > 0 ? allStudents[0] : null;
+      // Only student accounts get a writable/readable personal choice state in the UI.
+      if (data.userType && data.userType.isStudent) {
+        var allStudents = processStudentData(data.studentInfo, data.tripCounts, data.dataFields);
+        $scope.student = allStudents.length > 0 ? allStudents[0] : null;
+      } else {
+        $scope.student = null;
+      }
 
       // Default to first activity tab
       if ($scope.activityList.length > 0 && !$scope.activeActivityId) {

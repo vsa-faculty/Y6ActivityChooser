@@ -53,13 +53,7 @@ var appTitle = "Indicating your trip preference";
 //  doGet - main function for web app
 // -----
 function doGet(){
-  if(thisUser){
-    var myDoc = 'index';  
-  } else {
-    var myDoc = 'notLoggedIn';
-  }
-  
-  return HtmlService.createTemplateFromFile(myDoc).evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME);
+  return HtmlService.createTemplateFromFile('index').evaluate().setSandboxMode(HtmlService.SandboxMode.IFRAME);
 }
   
 // ----

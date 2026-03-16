@@ -77,6 +77,14 @@
     <div class="rounded-xl bg-red-50 border border-red-300 text-red-700 px-4 py-3 mb-4 text-sm">{{error.msg}}</div>
   </div>
 
+  <!-- Visitor notice -->
+  <div class="max-w-6xl mx-auto px-4" ng-show="!dataFetching && activityList.length && !hasStudentRecord()">
+    <div class="rounded-xl bg-slate-100 border border-slate-200 text-slate-700 px-4 py-3 mb-4 text-sm">
+      <span ng-show="data.user">You can browse all activities, but only registered student accounts can save choices.</span>
+      <span ng-show="!data.user">You can browse all activities without logging in. Log in with a registered student account to save choices.</span>
+    </div>
+  </div>
+
   <!-- Parent notice -->
   <div class="max-w-6xl mx-auto px-4" ng-show="data.userType.isParent && !data.userType.isStudent">
     <div class="rounded-xl bg-amber-50 border border-amber-300 text-amber-800 px-4 py-3 mb-4 text-sm">
@@ -85,10 +93,10 @@
   </div>
 
   <!-- Main -->
-  <main class="max-w-6xl mx-auto px-4 pb-16" ng-show="!dataFetching && student">
+  <main class="max-w-6xl mx-auto px-4 pb-16" ng-show="!dataFetching && activityList.length">
 
     <!-- ═══ TOKEN BAR ═══ -->
-    <div class="mb-6 rounded-2xl border bg-white shadow-sm p-4 md:p-5">
+    <div class="mb-6 rounded-2xl border bg-white shadow-sm p-4 md:p-5" ng-show="hasStudentRecord()">
       <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
         <div>
           <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-0.5">Your Choices</p>
@@ -98,7 +106,7 @@
           </p>
         </div>
         <!-- Save button -->
-        <div class="flex flex-col items-end gap-1" ng-show="student.canPost && data.userType.isStudent">
+        <div class="flex flex-col items-end gap-1" ng-show="canEditChoices()">
           <button
             ng-click="studentPostChoices(student.row, student.id, student.currentChoice, student.currentExtraData, 0)"
             ng-disabled="isSaved() || dataFetching || student.countSelected < maxSelections"
@@ -130,19 +138,19 @@
     </div>
 
     <!-- ═══ ACTIVITY NAV TABS ═══ -->
-    <nav class="flex overflow-x-auto no-scrollbar gap-1.5 md:gap-3 mb-4 pb-2 border-b border-slate-200">
+    <nav class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 mb-4 pb-2 border-b border-slate-200">
       <button ng-repeat="a in activityList | orderBy:'order'" ng-click="setActiveActivity(a.choiceID)"
-        class="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 text-left border-b-2"
+        class="min-w-0 min-h-[2.9rem] md:min-h-[3.25rem] flex items-start gap-2 px-3 py-2 rounded-xl transition-all duration-200 text-left border"
         ng-class="activeActivityId === a.choiceID
           ? 'bg-white border-vsaRed shadow-sm z-10'
-          : 'bg-transparent border-transparent hover:border-vsaBlue hover:bg-white/50'">
-        <span class="text-lg md:text-xl">{{a.emoji}}</span>
-        <span class="font-bold text-[9px] md:text-[10px] leading-tight uppercase tracking-wider"
+          : 'bg-white border-slate-200 hover:border-vsaBlue hover:bg-slate-50'">
+        <span class="text-lg md:text-xl leading-none pt-0.5 flex-shrink-0">{{a.emoji}}</span>
+        <span class="flex-1 min-w-0 font-bold text-[9px] md:text-[10px] leading-tight uppercase tracking-wide whitespace-normal break-words"
           ng-class="activeActivityId === a.choiceID ? 'text-vsaBlue' : 'text-slate-400'">
-          {{a.displayName.split(' ').slice(0,2).join(' ')}}…
+          {{a.displayName}}
         </span>
-        <!-- chosen indicator dot -->
-        <span ng-show="student.currentChoice[a.choiceID]" class="w-2 h-2 rounded-full bg-vsaRed flex-shrink-0"></span>
+        <span ng-show="hasStudentRecord() && (student.currentChoice[a.choiceID] === true || student.currentChoice[a.choiceID] === 1)"
+          class="mt-0.5 flex-shrink-0 inline-flex items-center justify-center w-5 h-5 rounded-full bg-green-100 text-green-700 border border-green-300 text-[11px] font-black">✓</span>
       </button>
     </nav>
 
@@ -230,7 +238,7 @@
           </div>
         </div>
         <!-- Sign-up / Drop-out button -->
-        <div ng-show="student.canPost && data.userType.isStudent">
+        <div ng-show="canEditChoices()">
           <button ng-show="!student.currentChoice[a.choiceID]"
             ng-disabled="student.currentChoice[a.choiceID] === -1 || student.countSelected >= maxSelections || dataFetching"
             ng-click="signUp(a)"
@@ -251,7 +259,7 @@
           </button>
         </div>
         <!-- Read-only status when survey closed -->
-        <div ng-show="!student.canPost || !data.userType.isStudent">
+        <div ng-show="hasStudentRecord() && !canEditChoices()">
           <span ng-show="student.currentChoice[a.choiceID] && student.currentChoice[a.choiceID] !== -1"
             class="px-4 py-2 rounded-xl text-sm font-bold bg-green-100 text-green-800 border border-green-300">✓ Selected</span>
           <span ng-show="!student.currentChoice[a.choiceID]"
