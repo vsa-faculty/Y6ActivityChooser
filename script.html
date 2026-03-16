@@ -15,6 +15,7 @@ app.controller('myCtrl', function($scope) {
   $scope.enableBuddyChoice = false;
   $scope.student      = null;   // single student record for current user
   $scope.activeActivityId = null;
+  $scope.tokenSlotsData = [];
 
   // ── Boot ───────────────────────────────────────────────────
   function loadData() {
@@ -60,6 +61,7 @@ app.controller('myCtrl', function($scope) {
         var sorted = $scope.activityList.slice().sort(function(a,b){ return a.order - b.order; });
         $scope.activeActivityId = sorted[0].choiceID;
       }
+      refreshTokenSlots();
     } catch(e) {
       $scope.error = {status: true, class: 'bg-danger', msg: e.toString()};
       console.error(e);
@@ -104,10 +106,12 @@ app.controller('myCtrl', function($scope) {
   }
 
   // ── Token helpers ──────────────────────────────────────────
-  // Returns an array of maxSelections slots, filled by selected activities in order.
-  $scope.tokenSlots = function() {
+  function refreshTokenSlots() {
     var s = $scope.student;
-    if (!s) return [];
+    if (!s) {
+      $scope.tokenSlotsData = [];
+      return;
+    }
     var slots = [];
     // Collect chosen activities with metadata
     var chosen = [];
@@ -124,8 +128,8 @@ app.controller('myCtrl', function($scope) {
         slots.push({filled: false});
       }
     }
-    return slots;
-  };
+    $scope.tokenSlotsData = slots;
+  }
 
   // ── Tab navigation ─────────────────────────────────────────
   $scope.setActiveActivity = function(choiceID) {
@@ -139,6 +143,7 @@ app.controller('myCtrl', function($scope) {
     if (s.countSelected >= $scope.maxSelections) return;
     s.currentChoice[activity.choiceID] = true;
     recount(s);
+    refreshTokenSlots();
   };
 
   $scope.dropChoice = function(choiceID) {
@@ -146,6 +151,7 @@ app.controller('myCtrl', function($scope) {
     if (!s || s.currentChoice[choiceID] === -1) return;
     s.currentChoice[choiceID] = false;
     recount(s);
+    refreshTokenSlots();
   };
 
   function recount(student) {
@@ -192,6 +198,7 @@ app.controller('myCtrl', function($scope) {
       var s = $scope.student;
       for (var key in update) { s[key] = update[key]; }
       processStudent(s, $scope.tripCounts, $scope.data.dataFields);
+      refreshTokenSlots();
     } else {
       loadData();
     }

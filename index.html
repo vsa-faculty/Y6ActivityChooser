@@ -117,7 +117,7 @@
 
       <!-- Token slots -->
       <div class="flex flex-wrap gap-2">
-        <div ng-repeat="slot in tokenSlots()" class="flex items-center gap-2 px-3 py-2 text-xs font-semibold"
+        <div ng-repeat="slot in tokenSlotsData track by $index" class="flex items-center gap-2 px-3 py-2 text-xs font-semibold"
           ng-class="slot.filled ? 'token-filled text-vsaBlue' : 'token-slot text-slate-400'">
           <span ng-show="slot.filled">{{slot.emoji}} {{slot.displayName}}</span>
           <span ng-show="!slot.filled" class="italic">Empty slot {{$index + 1}}</span>
