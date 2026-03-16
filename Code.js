@@ -119,18 +119,14 @@ function loadGInfo() {
     
   }
   
-  //Get a list of possible choices for this user
-  var possibleChoices = [];
-  var possibleChoiceList = textifyDates(ListDoc.getSheetByName(myListSheetName).getDataRange().getValues().splice(1));
-  /* for (var pc = 0; pc < possibleChoiceList.length; pc++){
-    possibleChoices.push(possibleChoiceList[pc][0]);
-  } */
+  // Load activity catalogue from Choices sheet (choiceID, displayName, order, description, staff, room, emoji, theme)
+  var activityList = arrayToObjects(ListDoc.getSheetByName(myListSheetName).getDataRange().getValues());
+
   var tripCounts = arrayToObjects(SurveyDoc.getSheetByName(mySurveyTripCounts).getDataRange().getValues());
   
   var refreshTime = Utilities.formatDate(new Date(), "GMT+08:00", "dd-MMM-yyyy hh:mm:ss")
   
-  //Logger.log({studentInfo: studentInfo, tripCounts: tripCounts, buddyList: buddyList, userType: userType, canPost: canPost, error: error,  refreshed: refreshTime, maxSelections: maxTripChoices, user: thisUser, dataFields: extraDataFields})
-  return {studentInfo: studentInfo, tripCounts: tripCounts, buddyList: buddyList, userType: userType, canPost: canPost, error: error,  refreshed: refreshTime, maxSelections: maxTripChoices, user: thisUser, dataFields: extraDataFields, enableBuddyChoice: enableBuddyChoice};
+  return {studentInfo: studentInfo, tripCounts: tripCounts, activityList: activityList, buddyList: buddyList, userType: userType, canPost: canPost, error: error, refreshed: refreshTime, maxSelections: maxTripChoices, user: thisUser, dataFields: extraDataFields, enableBuddyChoice: enableBuddyChoice};
 }
 
 function getTripCounts(){
