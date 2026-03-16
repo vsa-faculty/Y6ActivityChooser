@@ -37,15 +37,17 @@ app.controller('myCtrl', function($scope) {
         // Normalize Choices sheet column names to camelCase for the UI.
         // The sheet uses "ChoiceID" and "Choice Name"; we map to choiceID / displayName.
         $scope.activityList = (data.activityList || []).map(function(a) {
+          var rawTheme = (a.theme || '').toString().trim().toLowerCase();
+          var rawOrder = Number(a.order);
           return {
             choiceID:    a['ChoiceID']    || a.choiceID    || '',
             displayName: a['Choice Name'] || a.displayName || '',
-            order:       a.order,
-            description: a.description,
-            staff:       a.staff,
-            room:        a.room,
-            emoji:       a.emoji,
-            theme:       a.theme
+            order:       Number.isFinite(rawOrder) ? rawOrder : 999,
+            description: a.description || 'Activity details will be published soon.',
+            staff:       a.staff || 'TBC',
+            room:        a.room || 'TBC',
+            emoji:       a.emoji || '🎯',
+            theme:       rawTheme
           };
         });
       $scope.maxSelections    = data.maxSelections;
@@ -134,6 +136,10 @@ app.controller('myCtrl', function($scope) {
   // ── Tab navigation ─────────────────────────────────────────
   $scope.setActiveActivity = function(choiceID) {
     $scope.activeActivityId = choiceID;
+  };
+
+  $scope.isKnownTheme = function(theme) {
+    return theme === 'sculpture' || theme === 'robotics' || theme === 'rockets' || theme === 'mystery';
   };
 
   // ── Sign-up / Drop-out ─────────────────────────────────────
