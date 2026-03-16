@@ -119,7 +119,7 @@ function loadGInfo() {
     
   }
   
-  // Load activity catalogue from Choices sheet (choiceID, displayName, order, description, staff, room, emoji, theme)
+  // Load activity catalogue from Choices sheet (ChoiceID, Max Quota, Count, Choice Name, Master Activity, Group Column Number, Group Column Allowed For, order, description, staff, room, emoji, theme)
   var activityList = arrayToObjects(ListDoc.getSheetByName(myListSheetName).getDataRange().getValues());
 
   var tripCounts = arrayToObjects(SurveyDoc.getSheetByName(mySurveyTripCounts).getDataRange().getValues());

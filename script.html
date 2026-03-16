@@ -33,7 +33,20 @@ app.controller('myCtrl', function($scope) {
     $scope.error        = data.error;
     try {
       $scope.tripCounts       = data.tripCounts;
-      $scope.activityList     = data.activityList || [];
+        // Normalize Choices sheet column names to camelCase for the UI.
+        // The sheet uses "ChoiceID" and "Choice Name"; we map to choiceID / displayName.
+        $scope.activityList = (data.activityList || []).map(function(a) {
+          return {
+            choiceID:    a['ChoiceID']    || a.choiceID    || '',
+            displayName: a['Choice Name'] || a.displayName || '',
+            order:       a.order,
+            description: a.description,
+            staff:       a.staff,
+            room:        a.room,
+            emoji:       a.emoji,
+            theme:       a.theme
+          };
+        });
       $scope.maxSelections    = data.maxSelections;
       $scope.enableBuddyChoice = !!data.enableBuddyChoice;
       $scope.buddyList        = data.buddyList;
