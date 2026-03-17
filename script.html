@@ -16,8 +16,61 @@ app.controller('myCtrl', function($scope) {
   $scope.student      = null;   // single student record for current user
   $scope.activeActivityId = null;
   $scope.tokenSlotsData = [];
+  function normalizeCanPostValue(value) {
+    if (value === true || value === 1) return true;
+    if (typeof value === 'string') {
+      var normalized = value.trim().toLowerCase();
+      return normalized === 'true' || normalized === '1';
+    }
+    return false;
+  }
+
+  function parseStudentDate(value) {
+    if (!value) return null;
+    if (value instanceof Date) {
+      return isNaN(value.getTime()) ? null : value;
+    }
+    var parsed = new Date(value);
+    return isNaN(parsed.getTime()) ? null : parsed;
+  }
+
+  function formatStudentDate(value) {
+    var parsed = parseStudentDate(value);
+    if (!parsed) return 'TBC';
+    return parsed.toLocaleString('en-GB', {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+  }
+
+  $scope.isPostingWindowOpen = function() {
+    var s = $scope.student;
+    if (!s || !$scope.data.userType || !$scope.data.userType.isStudent) return false;
+    var canPostValue = s.canPost;
+    if (canPostValue === undefined || canPostValue === null) {
+      canPostValue = s.canpost;
+    }
+    var canPostAllowed = normalizeCanPostValue(canPostValue);
+    var startDate = parseStudentDate(s.postStartDate);
+    var endDate = parseStudentDate(s.postEndDate);
+    if (!canPostAllowed || !startDate || !endDate) return false;
+
+    var now = new Date();
+    return startDate < now && now < endDate;
+  };
+
+  $scope.getPostingWindowNotice = function() {
+    var s = $scope.student;
+    if (!s) return '';
+    return 'Choices open: ' + formatStudentDate(s.postStartDate) + ' to ' + formatStudentDate(s.postEndDate) + '.';
+  };
+
   $scope.canEditChoices = function() {
-    return !!($scope.student && $scope.student.canPost && $scope.data.userType && $scope.data.userType.isStudent);
+    return $scope.isPostingWindowOpen();
   };
 
   $scope.hasStudentRecord = function() {

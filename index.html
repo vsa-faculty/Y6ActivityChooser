@@ -39,7 +39,7 @@
     .token-slot { border:2px dashed #cbd5e1; border-radius:.75rem; min-width:7rem; }
     .token-filled { border:2px solid #004C80; background:#eff6ff; border-radius:.75rem; }
   </style>
-  <title>Activities Week 2026</title>
+  <title>Y6 Activity Programme: In-School Choices</title>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-900 font-sans" ng-app="myApp" ng-controller="myCtrl" ng-cloak>
 
@@ -56,11 +56,15 @@
       </div>
     </div>
     <h1 class="text-xl md:text-3xl font-black text-vsaBlue tracking-tight uppercase">
-      Activities Week <span class="text-vsaRed italic">2026</span>
+      Y6 Activity Programme: <span class="text-vsaRed italic">In-School Choices</span>
     </h1>
     <p class="text-[10px] md:text-sm text-slate-500 mt-1">
       <?= thisUser ?>
       <span ng-show="student.name"> &mdash; {{student.name}}</span>
+    </p>
+    <p class="text-[11px] md:text-sm text-slate-700 mt-3 max-w-3xl mx-auto leading-relaxed">
+      Students should choose 3 activities by Wednesday 25-Mar-2026.<br>
+      Students will then be assigned 2 of the activities they have chosen for the In-School Programme.
     </p>
   </header>
 
@@ -103,8 +107,8 @@
         <div>
           <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-0">Your Choices</p>
           <p class="text-[11px] text-slate-500 leading-tight">
-            <span ng-show="student.canPost">Pick <strong>{{maxSelections}}</strong> activities, then save.</span>
-            <span ng-show="!student.canPost">Survey closed &mdash; {{student.postStartDate}} to {{student.postEndDate}}.</span>
+            <span ng-show="canEditChoices()">Pick <strong>{{maxSelections}}</strong> activities, then save.</span>
+            <span ng-show="!canEditChoices()">{{getPostingWindowNotice()}}</span>
           </p>
           <p class="text-[11px] font-bold text-orange-700 mt-0.5" ng-show="canEditChoices() && !isSaved()">
             You have unsaved changes. Click Save Changes.
@@ -127,6 +131,10 @@
           <span class="text-[10px] text-orange-700 font-bold" ng-show="!isSaved()">Unsaved changes</span>
           <span class="text-[10px] text-slate-400" ng-show="isSaved()">No new changes to save.</span>
         </div>
+        <div class="text-right" ng-show="!canEditChoices()">
+          <p class="text-[10px] md:text-[11px] text-slate-500 font-semibold">Choices are currently closed for saving.</p>
+          <p class="text-[10px] md:text-[11px] text-slate-500">{{getPostingWindowNotice()}}</p>
+        </div>
       </div>
 
       <!-- Token slots -->
@@ -135,7 +143,7 @@
           ng-class="slot.filled ? 'token-filled text-vsaBlue' : 'token-slot text-slate-400'">
           <span ng-show="slot.filled" class="truncate max-w-[11rem]">{{slot.emoji}} {{slot.displayName}}</span>
           <span ng-show="!slot.filled" class="italic">Empty {{$index + 1}}</span>
-          <button ng-show="slot.filled && student.canPost && data.userType.isStudent"
+          <button ng-show="slot.filled && canEditChoices()"
             ng-click="dropChoice(slot.choiceID)"
             class="ml-1 text-slate-400 hover:text-vsaRed transition-colors"
             title="Drop this choice">&times;</button>
@@ -278,7 +286,7 @@
 
   <footer class="bg-vsaBlue text-white py-6">
     <div class="max-w-6xl mx-auto px-4 text-center">
-      <p class="text-xs text-blue-300">MYP Activities Week 2026 &bull; Year 6 Choice Portal</p>
+      <p class="text-xs text-blue-300">Y6 Activity Programme 2026 &bull; In-School Choices Portal</p>
     </div>
   </footer>
 
