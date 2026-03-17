@@ -24,6 +24,23 @@ app.controller('myCtrl', function($scope) {
     return !!$scope.student;
   };
 
+  function hasUnsavedEditableChanges() {
+    return !!($scope.canEditChoices && $scope.canEditChoices() && $scope.isSaved && !$scope.isSaved());
+  }
+
+  function handleBeforeUnload(event) {
+    if (!hasUnsavedEditableChanges()) return;
+    var warning = 'You have unsaved changes. Are you sure you want to leave this page?';
+    event.preventDefault();
+    event.returnValue = warning;
+    return warning;
+  }
+
+  window.addEventListener('beforeunload', handleBeforeUnload);
+  $scope.$on('$destroy', function() {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+  });
+
   // ── Boot ───────────────────────────────────────────────────
   function loadData() {
     $scope.dataFetching = true;

@@ -39,7 +39,7 @@
     .token-slot { border:2px dashed #cbd5e1; border-radius:.75rem; min-width:7rem; }
     .token-filled { border:2px solid #004C80; background:#eff6ff; border-radius:.75rem; }
   </style>
-  <title>Adventure Week 2026</title>
+  <title>Activities Week 2026</title>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-900 font-sans" ng-app="myApp" ng-controller="myCtrl" ng-cloak>
 
@@ -56,7 +56,7 @@
       </div>
     </div>
     <h1 class="text-xl md:text-3xl font-black text-vsaBlue tracking-tight uppercase">
-      Adventure Week <span class="text-vsaRed italic">2026</span>
+      Activities Week <span class="text-vsaRed italic">2026</span>
     </h1>
     <p class="text-[10px] md:text-sm text-slate-500 mt-1">
       <?= thisUser ?>
@@ -96,39 +96,45 @@
   <main class="max-w-6xl mx-auto px-4 pb-16" ng-show="!dataFetching && activityList.length">
 
     <!-- ═══ TOKEN BAR ═══ -->
-    <div class="mb-6 rounded-2xl border bg-white shadow-sm p-4 md:p-5" ng-show="hasStudentRecord()">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+    <div class="mb-4 rounded-2xl border p-3 md:p-4 transition-all"
+      ng-class="canEditChoices() && !isSaved() ? 'bg-orange-50 border-orange-300 shadow-md ring-2 ring-orange-200' : 'bg-white border-slate-200 shadow-sm'"
+      ng-show="hasStudentRecord()">
+      <div class="flex items-center justify-between gap-2 mb-2">
         <div>
-          <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-0.5">Your Choices</p>
-          <p class="text-xs text-slate-500">
+          <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-0">Your Choices</p>
+          <p class="text-[11px] text-slate-500 leading-tight">
             <span ng-show="student.canPost">Pick <strong>{{maxSelections}}</strong> activities, then save.</span>
             <span ng-show="!student.canPost">Survey closed &mdash; {{student.postStartDate}} to {{student.postEndDate}}.</span>
           </p>
+          <p class="text-[11px] font-bold text-orange-700 mt-0.5" ng-show="canEditChoices() && !isSaved()">
+            You have unsaved changes. Click Save Changes.
+          </p>
         </div>
         <!-- Save button -->
-        <div class="flex flex-col items-end gap-1" ng-show="canEditChoices()">
+        <div class="flex flex-col items-end gap-0.5 flex-shrink-0" ng-show="canEditChoices()">
           <button
             ng-click="studentPostChoices(student.row, student.id, student.currentChoice, student.currentExtraData, 0)"
             ng-disabled="isSaved() || dataFetching || student.countSelected < maxSelections"
-            class="px-6 py-2.5 rounded-xl font-bold text-sm transition-all"
+            class="px-5 py-2 rounded-xl font-black text-xs md:text-sm transition-all border-2"
             ng-class="{
-              'bg-slate-200 text-slate-400 cursor-not-allowed': isSaved() || student.countSelected < maxSelections,
-              'bg-vsaBlue text-white hover:bg-blue-800 shadow-md': !isSaved() && student.countSelected >= maxSelections
+              'bg-slate-200 border-slate-200 text-slate-400 cursor-not-allowed': isSaved() || student.countSelected < maxSelections,
+              'bg-orange-500 border-orange-700 text-white hover:bg-orange-600 shadow-lg': !isSaved() && student.countSelected >= maxSelections
             }">
             <span ng-show="isSaved()">✓ Saved</span>
-            <span ng-show="!isSaved() && student.countSelected >= maxSelections">Save Choices</span>
+            <span ng-show="!isSaved() && student.countSelected >= maxSelections">Save Changes</span>
             <span ng-show="!isSaved() && student.countSelected < maxSelections">{{maxSelections - student.countSelected}} more needed</span>
           </button>
+          <span class="text-[10px] text-orange-700 font-bold" ng-show="!isSaved()">Unsaved changes</span>
           <span class="text-[10px] text-slate-400" ng-show="isSaved()">No new changes to save.</span>
         </div>
       </div>
 
       <!-- Token slots -->
-      <div class="flex flex-wrap gap-2">
-        <div ng-repeat="slot in tokenSlotsData track by $index" class="flex items-center gap-2 px-3 py-2 text-xs font-semibold"
+      <div class="flex gap-2 overflow-x-auto no-scrollbar whitespace-nowrap pb-1">
+        <div ng-repeat="slot in tokenSlotsData track by $index" class="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] font-semibold"
           ng-class="slot.filled ? 'token-filled text-vsaBlue' : 'token-slot text-slate-400'">
-          <span ng-show="slot.filled">{{slot.emoji}} {{slot.displayName}}</span>
-          <span ng-show="!slot.filled" class="italic">Empty slot {{$index + 1}}</span>
+          <span ng-show="slot.filled" class="truncate max-w-[11rem]">{{slot.emoji}} {{slot.displayName}}</span>
+          <span ng-show="!slot.filled" class="italic">Empty {{$index + 1}}</span>
           <button ng-show="slot.filled && student.canPost && data.userType.isStudent"
             ng-click="dropChoice(slot.choiceID)"
             class="ml-1 text-slate-400 hover:text-vsaRed transition-colors"
@@ -237,15 +243,15 @@
             <span class="text-[8px] md:text-[9px] font-bold text-vsaRed">VSA Y6 2026</span>
           </div>
         </div>
-        <!-- Sign-up / Drop-out button -->
-        <div ng-show="canEditChoices()">
+        <!-- Sign-up / Remove Choice button -->
+        <div ng-show="canEditChoices()" class="w-full md:w-[46%]">
           <button ng-show="!student.currentChoice[a.choiceID]"
             ng-disabled="student.currentChoice[a.choiceID] === -1 || student.countSelected >= maxSelections || dataFetching"
             ng-click="signUp(a)"
-            class="px-5 py-2.5 rounded-xl font-bold text-sm transition-all"
+            class="w-full px-6 py-4 rounded-2xl font-black text-base md:text-lg transition-all border-2"
             ng-class="{
-              'bg-slate-200 text-slate-400 cursor-not-allowed': student.countSelected >= maxSelections || student.currentChoice[a.choiceID] === -1,
-              'bg-vsaBlue text-white hover:bg-blue-800 shadow': student.countSelected < maxSelections && student.currentChoice[a.choiceID] !== -1
+              'bg-slate-200 border-slate-200 text-slate-400 cursor-not-allowed': student.countSelected >= maxSelections || student.currentChoice[a.choiceID] === -1,
+              'bg-vsaBlue border-blue-900 text-white hover:bg-blue-800 shadow-lg': student.countSelected < maxSelections && student.currentChoice[a.choiceID] !== -1
             }">
             <span ng-show="student.currentChoice[a.choiceID] === -1">Unavailable</span>
             <span ng-show="student.currentChoice[a.choiceID] !== -1 && student.countSelected >= maxSelections">Choices full</span>
@@ -254,8 +260,8 @@
           <button ng-show="student.currentChoice[a.choiceID] && student.currentChoice[a.choiceID] !== -1"
             ng-disabled="dataFetching"
             ng-click="dropChoice(a.choiceID)"
-            class="px-5 py-2.5 rounded-xl font-bold text-sm bg-vsaRed text-white hover:bg-red-800 shadow transition-all">
-            ✕ Drop out
+            class="w-full px-6 py-4 rounded-2xl font-black text-base md:text-lg bg-red-50 border-2 border-red-900 text-vsaRed hover:bg-red-100 shadow transition-all">
+            ✕ Remove Choice
           </button>
         </div>
         <!-- Read-only status when survey closed -->
